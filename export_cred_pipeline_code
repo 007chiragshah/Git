@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    environment {
+        // Define variables to store credentials
+        MY_USERNAME = ''
+        MY_PASSWORD = ''
+    }
+
+    stages {
+        stage('GEt Credentials') {
+            steps {
+                script{
+                    withCredentials([usernamePassword(credentialsId: 'f32ea2b1-a5eb-4bf0-beb3-97908c349b4e', passwordVariable: 'MY_PASSWORD', usernameVariable: 'MY_USERNAME')]) 
+                    {
+                        echo "Username: $MY_USERNAME"
+                        echo "Password: $MY_PASSWORD"
+                }
+                    
+                }
+            }
+        }
+    }
+}
