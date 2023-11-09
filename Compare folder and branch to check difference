@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    environment {
+        token = credentials('Token')
+        GITHUB_API_URL='https://api.github.com/repos/EcoNet-Rheem/htpg'
+    }
+    
+    stages {
+        stage('cloning') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: 'PR-*']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: "https://${token}@github.com/EcoNet-Rheem/RheemCONNECTPortals.git"]]])
+                sh 'echo checkout PR successfull'
+            }
+        }
+		stage('Build') {
+            steps {
+                script {
+                    if (sh(script: 'git diff --quiet HEAD origin/DEVOPS-329 -- Portals', returnStatus: true) != 0){
+                        echo 'Differences found in Portals'
+                        sh '''cd Portals
+                            npm install
+                            npm run build'''
+                    else {
+                        echo 'Difference found outside the directory'
+                    }
+                }
+            }
+        }
+     }
+	}
+}
