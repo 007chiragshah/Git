@@ -1,0 +1,14 @@
+	post {
+        always {
+            emailext ( 
+                subject: '${DEFAULT_SUBJECT}'+'FAILED!', 
+                body: '${DEFAULT_CONTENT}',
+                to: '',
+                postsendScript: '$DEFAULT_POSTSEND_SCRIPT', 
+                presendScript: '$DEFAULT_PRESEND_SCRIPT',
+                attachmentsPattern: 'newman/*.html',
+                attachLog: true,
+                );
+               
+        }
+	}
